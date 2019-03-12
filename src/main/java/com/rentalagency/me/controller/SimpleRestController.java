@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rentalagency.me.model.User;
 
 @RestController
+@RequestMapping("/api/")
 public class SimpleRestController {
 	
 	@RequestMapping(value="/users")

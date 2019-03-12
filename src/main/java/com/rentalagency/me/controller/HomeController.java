@@ -12,8 +12,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.view.RedirectView;
 
+import com.rentalagency.me.bean.LoginBean;
+import com.rentalagency.me.dao.LoginDAO;
 import com.rentalagency.me.model.User;
 
 /**
@@ -57,10 +61,31 @@ public class HomeController {
 	
 
 	
-	@RequestMapping(value="/json", method = RequestMethod.GET)
-	public @ResponseBody List<User> jsonFun() {
+	/*
+	 * @RequestParam instead of HttpServletRequest to avoid request.parameter("email")
+	 */
+	@RequestMapping(value="/json", method = RequestMethod.POST)
+	public String loginUser(Model model,
+			@RequestParam(value="email", required=false) String email, 
+	        @RequestParam(value="password", required=false) String password) {
+		LoginBean lb = new LoginBean();
+		lb.setEmail(email);
+		lb.setPass(password);
 		
-		return getUsers();
+		if(LoginDAO.validate(lb)) {
+			model.addAttribute("status", "true");
+			return "login";
+		}
+		System.out.println("Sucker didnt' go through");
+		model.addAttribute("status", "false");
+		return "login";
+	}
+	
+	// Return Login Page
+	@RequestMapping(value="/login", method = RequestMethod.GET)
+	public String loginPage(Model model) {
+		model.addAttribute("status", null);
+		return "login";
 	}
 	
 	@RequestMapping(value="/jsonXML", method = RequestMethod.GET)
