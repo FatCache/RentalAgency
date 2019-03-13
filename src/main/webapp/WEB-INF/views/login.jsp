@@ -17,7 +17,7 @@
 		</c:when>
 		
 	</c:choose>
-	<form action="json" method="post">
+	<form action="loginValidate" method="post">
 		Email:<input type="text" name="email" value="ming" /> <br /> <br />
 		Password:<input type="password" name="password" value="ming" /><br />
 		<br /> <input type="submit" value="login" />"

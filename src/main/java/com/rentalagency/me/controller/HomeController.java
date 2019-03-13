@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +19,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.rentalagency.me.bean.LoginBean;
 import com.rentalagency.me.dao.LoginDAO;
+import com.rentalagency.me.model.Message;
 import com.rentalagency.me.model.User;
 
 /**
@@ -47,8 +49,8 @@ public class HomeController {
 	
 	public List<User> getUsers(){
 		User u1 = new User("Abdusamed");
-		User u2 = new User("Abdusamed");
-		User u3 = new User("Abdusamed");
+		User u2 = new User("Ming");
+		User u3 = new User("Stone");
 		
 		List<User> users = new ArrayList<User>();
 		
@@ -64,7 +66,7 @@ public class HomeController {
 	/*
 	 * @RequestParam instead of HttpServletRequest to avoid request.parameter("email")
 	 */
-	@RequestMapping(value="/json", method = RequestMethod.POST)
+	@RequestMapping(value="/loginValidate", method = RequestMethod.POST)
 	public String loginUser(Model model,
 			@RequestParam(value="email", required=false) String email, 
 	        @RequestParam(value="password", required=false) String password) {
@@ -76,7 +78,7 @@ public class HomeController {
 			model.addAttribute("status", "true");
 			return "login";
 		}
-		System.out.println("Sucker didnt' go through");
+
 		model.addAttribute("status", "false");
 		return "login";
 	}
@@ -88,10 +90,50 @@ public class HomeController {
 		return "login";
 	}
 	
-	@RequestMapping(value="/jsonXML", method = RequestMethod.GET)
+	@RequestMapping(value="api/userList/", method = RequestMethod.GET)
 	public String jsonFun(Model model) {
 		model.addAttribute("users",getUsers());
 		return "jsonTemplate";
 	}
+	
+	/*
+	 * Message list for a user populates the Table
+	 */
+	
+	@RequestMapping(value="{user}/message", method = RequestMethod.GET)
+	public String messageGet(Model model, @PathVariable String user) {
+		
+		List<Message> msgList = new ArrayList<Message>();
+		
+		for(int i = 0; i < 10; i++ ) {
+			Message msg = new Message("Message No. " + i);
+			msg.setSentTo(new User("Ming"));
+			msgList.add(msg);
+		}
+		
+		model.addAttribute("msgList", msgList);
+		model.addAttribute("pageType", "message");
+		
+		return "dashboard";	
+	}
+	
+	
+	/*
+	 * Message List as JSON Response
+	 */
+	@RequestMapping(value="api/{user}/message", method = RequestMethod.GET)
+	public String messageGetJSON(Model model, @PathVariable String user) {
+		System.out.println("User Name:" + user);
+		List<Message> msgList = new ArrayList<Message>();
+		
+		for(int i = 0; i < 10; i++ ) {			
+			msgList.add(new Message("Message No. " + i));
+		}
+		
+		model.addAttribute("msgList", msgList);
+		return "jsonTemplate";	
+	}
+	
+	
 	
 }
