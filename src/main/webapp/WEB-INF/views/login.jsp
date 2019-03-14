@@ -17,10 +17,9 @@
 		</c:when>
 		
 	</c:choose>
-	<form action="loginValidate" method="post">
-		Email:<input type="text" name="email" value="ming" /> <br /> <br />
-		Password:<input type="password" name="password" value="ming" /><br />
-		<br /> <input type="submit" value="login" />"
+	<form action="/api/sm/add" method="post">
+		Text:<input type="text" name="messageInput" value="Dummy Data Entry" /> <br /> <br />
+		<br /> <input type="submit" value="submit" />"
 
 
 

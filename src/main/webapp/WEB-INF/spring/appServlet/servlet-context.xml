@@ -30,5 +30,9 @@
     
     <beans:bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
 	
+	<!-- Beans for Autowiring -->
+	<beans:bean name="smdao" class="com.rentalagency.me.dao.SimpleMessageDAO">
+	</beans:bean>
+	
 	
 </beans:beans>

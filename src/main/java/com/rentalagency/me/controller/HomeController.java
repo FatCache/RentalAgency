@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.view.RedirectView;
+
 
 import com.rentalagency.me.bean.LoginBean;
 import com.rentalagency.me.dao.LoginDAO;
@@ -64,7 +63,8 @@ public class HomeController {
 
 	
 	/*
-	 * @RequestParam instead of HttpServletRequest to avoid request.parameter("email")
+	 * @RequestParam instead of HttpServletRequest to avoid 
+	 * multiple request.parameter(...)
 	 */
 	@RequestMapping(value="/loginValidate", method = RequestMethod.POST)
 	public String loginUser(Model model,
