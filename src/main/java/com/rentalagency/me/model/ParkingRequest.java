@@ -2,6 +2,14 @@ package com.rentalagency.me.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name = "parkingrequest_table")
 public class ParkingRequest extends Request {
 	/*
 	 * Parking Spot Assigned x & y coordinate
@@ -12,8 +20,15 @@ public class ParkingRequest extends Request {
 	private int userid;
 	private rowSpot rsp;
 	private colSpot csp;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "start_time", nullable = true, length = 10)
 	private Date startTime;
+	
+	@Temporal(TemporalType.DATE)
+	@Column(name = "end_time", nullable = true, length = 10)
 	private Date endTime;
+	
 	
 	// Assign Parking Spot 1A, 4E, etc
 	public enum rowSpot{

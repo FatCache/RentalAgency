@@ -7,6 +7,7 @@ import org.hibernate.HibernateException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.rentalagency.me.model.SimpleAccount;
 import com.rentalagency.me.model.SimpleMessage;
 
 /**
@@ -22,6 +23,12 @@ public class SimpleMessageDAO extends DAO {
 	public void create(SimpleMessage sm) {
 		try {
 			begin();
+			SimpleAccount sa = new SimpleAccount();
+			sa.setSimpleAccountDescription("The next phase: inheritance mapping" + sa.getSimpleAccountDescription());
+			
+			// Maintain the coherance of object graph
+			sm.setSm(sa);
+			sa.setSimplemessage(sm);			
 			getSession().persist(sm);
 			commit();
 			log.info("Simple Message with this content added: " + sm.getContent());

@@ -42,6 +42,7 @@
 				<tr>
 					<td>${sm.message_id}</td>
 					<td>${sm.content}</td>
+					<td>${sm.status}</td>
 					<td><a href="<c:url value='/api/sm/edit/${sm.message_id}' />">Edit</a></td>
 					<td><a
 						href="<c:url value='/api/sm/remove/${sm.message_id}' />">Delete</a></td>

@@ -20,9 +20,12 @@
 	<form action="/api/sm/add" method="post">
 		Text:<input type="text" name="messageInput" value="Dummy Data Entry" /> <br /> <br />
 		<br /> <input type="submit" value="submit" />"
-
-
-
+	</form>
+	<h4>Clicky Here To Register</h4>
+	<form action="${pageContext.request.contextPath}/useraccount/register" method="post">
+		Username:<input type="text" name="username" value="Lorem Ipsum" /> <br /> <br />
+		Password:<input type="text" name="password" value="Lorem Ipsum" /> <br /> <br />
+		<br /> <input type="submit" value="submit" />"
 	</form>
 </body>
 </html>

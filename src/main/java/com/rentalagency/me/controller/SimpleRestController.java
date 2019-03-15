@@ -14,15 +14,7 @@ public class SimpleRestController {
 	
 	@RequestMapping(value="/users")
 	public List<User> getUsers(){
-		User u1 = new User("Abdusamed");
-		User u2 = new User("Abdusamed");
-		User u3 = new User("Abdusamed");
-		
 		List<User> users = new ArrayList<User>();
-		
-		users.add(u1);
-		users.add(u1);
-		users.add(u1);
 		
 		return users;
 	}

@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,12 +21,17 @@ import com.rentalagency.me.bean.LoginBean;
 import com.rentalagency.me.dao.LoginDAO;
 import com.rentalagency.me.model.Message;
 import com.rentalagency.me.model.User;
+import com.rentalagency.me.model.UserAccount;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
 public class HomeController {
+	
+	@Autowired
+	LoginDAO logindao;
+	
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
@@ -45,22 +51,6 @@ public class HomeController {
 		
 		return "home";
 	}
-	
-	public List<User> getUsers(){
-		User u1 = new User("Abdusamed");
-		User u2 = new User("Ming");
-		User u3 = new User("Stone");
-		
-		List<User> users = new ArrayList<User>();
-		
-		users.add(u1);
-		users.add(u1);
-		users.add(u1);
-		
-		return users;
-	}
-	
-
 	
 	/*
 	 * @RequestParam instead of HttpServletRequest to avoid 
@@ -90,11 +80,11 @@ public class HomeController {
 		return "login";
 	}
 	
-	@RequestMapping(value="api/userList/", method = RequestMethod.GET)
-	public String jsonFun(Model model) {
-		model.addAttribute("users",getUsers());
-		return "jsonTemplate";
-	}
+//	@RequestMapping(value="api/userList/", method = RequestMethod.GET)
+//	public String jsonFun(Model model) {
+//		model.addAttribute("users",getUsers());
+//		return "jsonTemplate";
+//	}
 	
 	/*
 	 * Message list for a user populates the Table
@@ -104,13 +94,7 @@ public class HomeController {
 	public String messageGet(Model model, @PathVariable String user) {
 		
 		List<Message> msgList = new ArrayList<Message>();
-		
-		for(int i = 0; i < 10; i++ ) {
-			Message msg = new Message("Message No. " + i);
-			msg.setSentTo(new User("Ming"));
-			msgList.add(msg);
-		}
-		
+				
 		model.addAttribute("msgList", msgList);
 		model.addAttribute("pageType", "message");
 		
@@ -134,6 +118,25 @@ public class HomeController {
 		return "jsonTemplate";	
 	}
 	
+	@RequestMapping(value="useraccount/register", method = RequestMethod.POST)
+	public String createAccount(Model model,
+			@RequestParam(value="username") String username, 
+			@RequestParam(value="password") String password) {
+		UserAccount ua = new UserAccount();
+		
+		ua.setUsername(username);
+		ua.setPassword(password);
+
+		logindao.create(ua);
+		
+		return "login";
+		
+	}
+	@RequestMapping(value="useraccount/register", method = RequestMethod.GET)
+	public String createAccount() {
+		return "login";
+		
+	}
 	
 	
 }

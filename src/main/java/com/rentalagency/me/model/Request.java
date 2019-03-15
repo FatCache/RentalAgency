@@ -2,23 +2,44 @@ package com.rentalagency.me.model;
 
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+
 /*
  * Abstract Class request which can be extended to represent 
  *  other types such as, parking, cleaning, garbage disposal 
  */
+
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Request {
-
-	private int userId;
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private int request_id;
+	
 	private boolean status;
-	private Date createTime;
+//	private Date createTime;
 	private String description;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="user_id")
+	private User user;
 
-	public int getUserId() {
-		return userId;
+	public int getRequest_id() {
+		return request_id;
 	}
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+	public void setRequest_id(int request_id) {
+		this.request_id = request_id;
 	}
 
 	public boolean isStatus() {
@@ -36,5 +57,17 @@ public abstract class Request {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	
+	
+	
 
 }

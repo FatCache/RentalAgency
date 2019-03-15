@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.rentalagency.me.dao.SimpleMessageDAO;
 import com.rentalagency.me.model.SimpleMessage;
+import com.rentalagency.me.model.SimpleMessage.Status;
 
 @Controller
 @RequestMapping(value = "/api/sm/")
@@ -34,6 +35,7 @@ public class SimpleMessageController {
 	public String addMessage(Model model, @RequestParam(value="descr",required=false) String descr) {
 		SimpleMessage sm = new SimpleMessage();
 		sm.setContent(descr);
+		sm.setStatus(Status.UNDREAD);
 		this.smdao.create(sm);
 		
 		List<SimpleMessage> smlist = smdao.getMessageList();
