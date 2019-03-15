@@ -9,15 +9,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "parkingrequest_table")
 public class ParkingRequest extends Request {
 	/*
 	 * Parking Spot Assigned x & y coordinate
 	 * Start & End Time used to estimate cost
 	 * userid binding agent between it & user
 	 */
-	
-	private int userid;
+
 	private rowSpot rsp;
 	private colSpot csp;
 	
@@ -39,13 +37,6 @@ public class ParkingRequest extends Request {
 		A,B,C,D,E,F,G
 	}
 
-	public int getUserid() {
-		return userid;
-	}
-
-	public void setUserid(int userid) {
-		this.userid = userid;
-	}
 
 	public rowSpot getRsp() {
 		return rsp;

@@ -20,6 +20,9 @@
 		
 		<mapping class="com.rentalagency.me.model.Request"/>
 		<mapping class="com.rentalagency.me.model.ParkingRequest"/>
+		<mapping class="com.rentalagency.me.model.DummyRequest"/>
+		
+		<mapping class="com.rentalagency.me.model.SingleRequest"/>
 		
 	</session-factory>
 </hibernate-configuration>

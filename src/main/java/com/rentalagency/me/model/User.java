@@ -37,13 +37,18 @@ public class User  {
 	private String name; 
 	private Role role;
 	
-	@OneToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.EAGER)
 	@PrimaryKeyJoinColumn
 	private UserAccount userAccount;
 	
-	@OneToMany(fetch = FetchType.LAZY,mappedBy="user")
+	@OneToMany(fetch = FetchType.EAGER,mappedBy="user")
 	private Set<Request> requestSet = new HashSet<Request>();
-
+	
+	@OneToMany(mappedBy="user",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	private Set<DummyRequest> dummyRequest = new HashSet<DummyRequest>();
+	
+	@OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	private SingleRequest simplerequest;
 	
 	public enum Role {
 		REGULAR,MANGER
@@ -80,9 +85,31 @@ public class User  {
 
 	public void setUserAccount(UserAccount userAccount) {
 		this.userAccount = userAccount;
+	}
+
+	public Set<Request> getRequestSet() {
+		return requestSet;
+	}
+
+	public void setRequestSet(Set<Request> requestSet) {
+		this.requestSet = requestSet;
+	}
+
+	public Set<DummyRequest> getDummyRequest() {
+		return dummyRequest;
+	}
+
+	public void setDummyRequest(Set<DummyRequest> dummyRequest) {
+		this.dummyRequest = dummyRequest;
+	}
+
+	public SingleRequest getSimplerequest() {
+		return simplerequest;
+	}
+
+	public void setSimplerequest(SingleRequest simplerequest) {
+		this.simplerequest = simplerequest;
 	}	
-	
-	
 	 
 
 }
