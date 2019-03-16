@@ -3,80 +3,61 @@ package com.rentalagency.me.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import com.rentalagency.me.bean.ConnectionProvider;
 import com.rentalagency.me.bean.LoginBean;
-import com.rentalagency.me.model.DummyRequest;
+
 import com.rentalagency.me.model.ParkingRequest;
+import com.rentalagency.me.model.ParkingRequest.colSpot;
 import com.rentalagency.me.model.ParkingRequest.rowSpot;
 import com.rentalagency.me.model.Request;
 import com.rentalagency.me.model.SimpleMessage;
-import com.rentalagency.me.model.SingleRequest;
+
 import com.rentalagency.me.model.User;
 import com.rentalagency.me.model.UserAccount;
+
+import org.junit.Before;
+import org.junit.Test;
 
 public class LoginDAO extends DAO{
 	
 	private final static Logger log = LoggerFactory.getLogger(LoginDAO.class);
 
-	
+
 	public void create(UserAccount ua) {
 		try {
 			begin();
 			User us = new User();
 			us.setName("Created By: "  + ua.getUsername());
 			
-			
 			ua.setUser(us);
 			us.setUserAccount(ua);	
-			
-			SingleRequest sq = new SingleRequest();
-			sq.setDescription("I wasn't adding the object back to maintain the damn graph!");
-			sq.setUser(us);
-			us.setSimplerequest(sq);
-			
-			DummyRequest dr = new DummyRequest();
-			DummyRequest dr2 = new DummyRequest();			
-			dr.setDescribeMe("A job I want");
-			dr2.setDescribeMe("Its almost here");
-			
-			dr.setUser(us);
-			dr2.setUser(us);
-			
-			us.getDummyRequest().add(dr);
-			us.getDummyRequest().add(dr2);
-			
-			
+					
+			ParkingRequest prq = new ParkingRequest();
+			prq.setDescription("One of Many Request: " + ua.getUsername() );
+			prq.setRsp(rowSpot.NINE);
+			prq.setEndTime(new Date());
+			prq.setUser(us);
+
+			us.getRequestSet().add(prq);			
 			
 			getSession().persist(ua);
 			commit();
 			
 			
 			
-//			begin();
-			// ZombieCode
-//			ParkingRequest prq = new ParkingRequest();
-//			prq.setDescription("One of Many Request: " + ua.getUsername() );
-//			prq.setRsp(rowSpot.NINE);
-//			prq.setEndTime(new Date());
-//			
-//			DummyRequest dr = new DummyRequest();
-//			dr.setDescribeMe("A job I want");
-//			
-//			User ux = (User) getSession().load(User.class, new Integer(0));
-//			
-//			ux.getDummyRequest().add(dr);
-//			ux.getRequestSet().add(prq);	
-//			
-//			getSession().update(ux);
-			
-
-//			commit();
 			log.info("Account creation Successful");
 		} catch (HibernateException e) {
 			log.warn("Unable To Add Message, Failure");
@@ -85,6 +66,8 @@ public class LoginDAO extends DAO{
 			close();
 		}
 	}
+	
+	
 
 	public static boolean validate(LoginBean bean){  
 		boolean status=false;  

@@ -1,4 +1,4 @@
-package com.rentalagency.me.model;
+	package com.rentalagency.me.model;
 
 import java.util.Date;
 
