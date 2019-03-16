@@ -188,25 +188,27 @@ public class QueryDAO extends DAO {
 		return rq;
 	}
 	
-	public void deleteParkingRequestById(int request_id) {
+	public void deleteRequestById(int request_id) {
 		
 		try {
 			begin();
-			Criteria cr = getSession().createCriteria(ParkingRequest.class)
+			Criteria cr = getSession().createCriteria(Request.class)
 					.add(Restrictions.eq("request_id", request_id));			
 			
 			cr.setMaxResults(1);
-			ParkingRequest pr = (ParkingRequest) cr.uniqueResult();
+			Request pr = (Request) cr.uniqueResult();
 
 			if(pr != null) {
 				getSession().delete(pr);
 				log.info("Delete Performed");
 			}
+			commit();
 			
 				
 			
 		} catch(HibernateException e) {
-			log.warn("Unable to modify user account");
+			e.printStackTrace();
+			log.warn("Unable to Delete Post");
 			rollback();
 		}finally {
 			close();

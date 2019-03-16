@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
+import javax.swing.plaf.metal.MetalIconFactory.FolderIcon16;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -94,7 +96,10 @@ public class QueryTests {
 		assert (prl.size() != 0);
 	}
 	
-	@Test
+	/*
+	 * Creates and deletes a temporary Parking Request
+	 */
+//	@Test
 	public void deleteRequestById() {
 		ParkingRequest prq = new ParkingRequest();
 		prq.setDescription("Temporary Request to be deleted 2");
@@ -103,18 +108,20 @@ public class QueryTests {
 		prq.setStatus(true);
 		querydao.submitRequestById(prq,2);
 		
+		// Obtain Request newly assigned request_id identifier
 		ParkingRequest prqUpdated = querydao.getParkingRequestByUserIdByDescription(2,prq.getDescription());
-		
-		// prqUpdated will have a value: 
+		System.out.println(prqUpdated);
+ 
 		assert(prqUpdated != null);
 		
 		// Delete Request by Id
-		querydao.deleteParkingRequestById(prqUpdated.getRequest_id());
+		querydao.deleteRequestById(prqUpdated.getRequest_id());
 		
 		ParkingRequest nullRequest = querydao.getParkingRequestById(prqUpdated.getRequest_id());
 		
 		assert(nullRequest == null);
 		
-		
 	}
+	
+	
 }
