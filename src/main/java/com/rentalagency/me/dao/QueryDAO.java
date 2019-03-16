@@ -65,6 +65,29 @@ public class QueryDAO extends DAO {
 		
 	}
 	
+	
+	// Retrieve User by Id
+	public User getUserById(int id) {
+		User user = null;
+		try {
+			begin();
+
+			Query q = getSession().createQuery("FROM User U WHERE U.user_id = :user_id")
+					.setParameter("user_id", id);
+			q.setMaxResults(1);
+			user = (User) q.uniqueResult();	
+			
+		} catch(HibernateException e) {
+			log.warn("Unable to modify user account");
+			rollback();
+		}finally {
+			close();
+		}
+		
+		return user;
+		
+	}
+	
 	// Retrieve a list of ParkingRequest by Id	
 	public List<ParkingRequest> getParkingRequestListByUserId(int userId) {
 		List<ParkingRequest> parkingRequestList = null;
@@ -137,33 +160,8 @@ public class QueryDAO extends DAO {
 	}
 	
 	
-	/*
-	 * Modify User Account password
-	 */
-	public void modifyUserAccountById(int i, String newPassword) {
-		try {
-			begin();
-			Criteria cr = getSession().createCriteria(UserAccount.class);
-			Criterion userModify = Restrictions.eq("user_id", new Integer(i));
-			cr.add(userModify);
-			cr.setMaxResults(1);
-			
-			UserAccount user = (UserAccount) cr.uniqueResult();
-
-			user.setPassword(newPassword);
-			
-			getSession().update(user);
-			
-			commit();			
-			
-		} catch(HibernateException e) {
-			log.warn("Unable to modify user account");
-			rollback();
-		}finally {
-			close();
-		}
 		
-	}
+	
 	public ParkingRequest getParkingRequestByUserIdByDescription(int user_id, String description) {
 		ParkingRequest rq = null;
 		try {

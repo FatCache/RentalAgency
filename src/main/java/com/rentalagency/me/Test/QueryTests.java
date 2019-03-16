@@ -1,16 +1,10 @@
 package com.rentalagency.me.Test;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
-
-import javax.swing.plaf.metal.MetalIconFactory.FolderIcon16;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -123,5 +117,15 @@ public class QueryTests {
 		
 	}
 	
+	/*
+	 * Testing the name so it not null for account number 2
+	 */
+	@Test
+	public void getUserByIdTest() {
+		User us = querydao.getUserById(2);
+		
+		assert(us.getName() != null);
+		
+	}
 	
 }

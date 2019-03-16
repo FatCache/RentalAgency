@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
+import org.hibernate.query.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
@@ -87,4 +87,32 @@ public class LoginDAO extends DAO{
 		  
 		return status;  
 		}
+	
+
+	/*
+	 * Modify User Account password
+	 */
+	public void modifyUserAccountById(int user_id, String newPassword, String newUsername) {
+		try {
+			begin();
+			Criteria cr = getSession().createCriteria(UserAccount.class);
+			Criterion userModify = Restrictions.eq("user_id", new Integer(user_id));
+			cr.add(userModify);
+			cr.setMaxResults(1);
+			
+			UserAccount user = (UserAccount) cr.uniqueResult();
+			user.setUsername(newUsername);
+			user.setPassword(newPassword);
+			
+			getSession().update(user);
+			
+			commit();			
+			
+		} catch(HibernateException e) {
+			log.warn("Unable to modify user account");
+			rollback();
+		}finally {
+			close();
+		}
+	}
 }

@@ -52,7 +52,6 @@ public abstract class Request implements Serializable{
 	private String description;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	//@JoinColumn(name="user_id")
 	@PrimaryKeyJoinColumn
 	private User user;
 	
