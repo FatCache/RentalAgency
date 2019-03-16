@@ -30,11 +30,44 @@ public class ParkingRequest extends Request {
 	
 	// Assign Parking Spot 1A, 4E, etc
 	public enum rowSpot{
-		ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT,NINE,TEN
+		ONE("ONE"),TWO("TWO"),THREE("THREE"),FOUR("FOUR"),FIVE("FIVE"),
+		SIX("SIX"),SEVEN("SEVEN"),EIGHT("EIGHT"),NINE("NINE");
+		
+		private String name;
+		
+		rowSpot(String name){
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}		
+	
 	}
 	
 	public enum colSpot{
-		A,B,C,D,E,F,G
+		A("A"),B("B"),C("C"),D("D"),E("E"),F("F"),G("G");
+		
+		private String name;
+		
+		colSpot (String name) {
+			this.name= name;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+		
+		
+		
 	}
 
 
