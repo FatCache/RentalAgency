@@ -1,39 +1,32 @@
 package com.rentalagency.me.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.servlet.mvc.annotation.ResponseStatusExceptionResolver;
 
 import com.rentalagency.me.dao.LoginDAO;
 import com.rentalagency.me.dao.QueryDAO;
 import com.rentalagency.me.exception.ResourceNotFoundException;
-import com.rentalagency.me.model.Message;
 import com.rentalagency.me.model.Request;
 import com.rentalagency.me.model.User;
+import com.rentalagency.me.model.User.Role;
 import com.rentalagency.me.model.UserAccount;
 
 /**
- * Controller to handle the logic pertaining to a user associated 
- * with a manager role
+ * Controller to handle the logic pertaining to the users associated 
+ * with Manager role
  * 
  * @author abdusamed
  *
@@ -49,6 +42,8 @@ public class ManagerController {
 	 */
 	private final static String USERVIEW = "userview";
 	private final static String USERACCOUNTVIEW = "useraccountview";
+	
+	private static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
 	
 	@Autowired
 	QueryDAO querydao;
@@ -94,9 +89,10 @@ public class ManagerController {
 	}
 	
 	/**
-	 * R
-	 * @param model
-	 * @return
+	 * Populates the userview page with list of user regular user accounts
+	 * and sets up pagetype to reflect it
+	 * @return user view populated with user account objects & page type to \
+	 * reflect it
 	 */
 	@RequestMapping(value="/useraccount/view",method=RequestMethod.GET)
 	public String getUserAccount(Model model) {
@@ -107,10 +103,11 @@ public class ManagerController {
 	}
 	
 	
-	/*
-	 * Retrieve User list without manager role and resolve view
+	/**
+	 * Populates the userview page with list of all  users
+	 * and sets up pagetype to reflect it
+	 * @return user view populated with user objects & page type to userview
 	 */
-	
 	@RequestMapping(value="/user/view",method=RequestMethod.GET)
 	public String getUser(Model model) {
 		List<User> uas = querydao.getListOfUsers();
@@ -119,15 +116,18 @@ public class ManagerController {
 		return "manager/userview";
 	}
 	
-	/*
-	 * Delete user account using user_id. Takes request from either view
-	 * Useraccount view or User view.
+	/**
+	 * Handles the logic of deleting used account by ID.
+	 * Returns the user back to appropriate view from where originally
+	 * came from 
+	 * @param id user_id mapped to the user account 
+	 * @param viewtype indicates origin of the the request
+	 * @return returns view which depends on source view
 	 */
 	@RequestMapping(value="/useraccount/view/remove/{id}",method=RequestMethod.GET)
 	public String deleteUser(Model model,
 			@PathVariable("id") int id,
-			@RequestParam("viewtype") String viewtype,
-			HttpServletResponse response) {
+			@RequestParam("viewtype") String viewtype) {
 		logindao.deleteUserAccountById(id);
 		
 		if(viewtype.equals(USERACCOUNTVIEW)) {
@@ -142,22 +142,46 @@ public class ManagerController {
 	}
 	
 	/**
-	 * Custom Exception Handling for this class
+	 * Custom Exception Handler mapped to ResourceNotFoundException class
+	 * Logs a generic error when thrown
+	 * Returns a view titled 'error' which currently is a JSP page which acts
+	 * as a place ho
+	 * 
+	 *  Example method to Invoke: Request /api/useraccount/view/
+	 *  without logged in or logged as user without Manager role
 	 */
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public String handleResourceNotFoundException() {
+		logger.warn("Error Occured in the request");
 	    return "error";	    
 	}
 	
 	
+	/**
+	 * Basic API call to the /manager/useraccount/view
+	 * Creates a JSON response which can be consumed for example by 
+	 * Javascript frameworks - React, Angular
+	 * Has authentication check which makes the caller is 
+	 * 	1) Authenticated as being logged in
+	 * 	2) Caller belongs to the manager class
+	 * 
+	 * @param model
+	 * @param session
+	 * @return JSON representation of Non Manager UserAccount list  
+	 */
 	@RequestMapping(value = "api/useraccount/view", method = RequestMethod.GET)
 	public String messageGetJSON(Model model,HttpSession session) {
 		if(session.getAttribute("user") == null) {
+			logger.warn("Error: User not logged in");
 			throw new ResourceNotFoundException();
 		}
 		UserAccount user = (UserAccount) session.getAttribute("user");
-		System.out.println("Super simple session" + user.getUsername());
-		List<UserAccount> uas = querydao.getListOfUserAccountRegular();
+		if(!user.getUser().getRole().equals(Role.MANAGER)) {
+			logger.warn("Error: Access Forbidden");
+			throw new ResourceNotFoundException();
+		}
+		List<UserAccount> uas = querydao.getListOfUserAccountRegularJSON();
+		
 		model.addAttribute("uas", uas);
 		return "jsonTemplate";
 	}

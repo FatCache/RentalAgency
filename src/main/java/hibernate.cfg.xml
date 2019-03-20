@@ -12,9 +12,6 @@
 		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		
-		<mapping class="com.rentalagency.me.model.SimpleMessage"/>
-		<mapping class="com.rentalagency.me.model.SimpleAccount"/>
-		
 		<mapping class="com.rentalagency.me.model.UserAccount"/>
 		<mapping class="com.rentalagency.me.model.User"/>
 		

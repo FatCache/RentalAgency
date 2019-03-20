@@ -7,10 +7,11 @@ import java.sql.DriverManager;
  * Class which returns a single instance connection to the database
  * 
  * Change CONNECTION_URL, USERNAME, PASSWORD to match your configuration
- * of JDBC connection 
+ * of JDBC connection. Used if Hibernate ORM is not be used.
  * @author abdusamed
  *
  */
+
 public class ConnectionProvider implements Provider {
 
 	private static Connection con = null;

@@ -7,15 +7,23 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import org.hibernate.engine.spi.CascadeStyle;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-/*
- * One Useraccount is mapped to one User object
- * If the useraccount is deleted, along with all history tied to it
+/**
+ * UserAccount stores the login credential once created
+ * and builds the association with it. For example, a user 
+ * object is assigned to it. The mapping logic of new user object 
+ * is carried in LoginDAO classes.
+ * 
+ * Once a user_account is deleted, everything associated with 
+ * it is cascaded throughout the database. The credentials are 
+ * kept in the table called "useraccount_table".
+ *  
+ * @author abdusamed
+ *
  */
 @Entity
 @Table(name="useraccount_table")
@@ -31,6 +39,7 @@ public class UserAccount {
 	
 	//UserAccount is parent to child -> User association. "
 	@OneToOne(fetch=FetchType.LAZY,cascade=CascadeType.ALL,mappedBy = "userAccount")
+    @JsonIgnore // Required to avoid recursive loop during JSON marshalling
 	private User user;
 
 	public int getUser_id() {

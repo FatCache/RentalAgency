@@ -8,6 +8,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+/**
+ * Standard DAO class with mapping to hibernate configuration file.
+ * Hibernate configuration file contains the mapping of POJO classes 
+ * and connection requirements to the JDBC class
+ * @author abdusamed
+ *
+ */
 public class DAO {
 	
 	private static final Logger log = Logger.getAnonymousLogger();

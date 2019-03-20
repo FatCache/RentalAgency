@@ -21,11 +21,25 @@ import com.rentalagency.me.model.User;
 import com.rentalagency.me.model.User.Role;
 import com.rentalagency.me.model.UserAccount;
 
+/**
+ * Data persistence login used to handle the user authentication.
+ * The database queries are handled using Hibernate session 
+ * 
+ * Data persistence tied to creation and modification to user account
+ * for example, change of password is handled here.
+ * @author abdusamed
+ * @
+ *
+ */
 public class LoginDAO extends DAO{
 	
 	private final static Logger log = LoggerFactory.getLogger(LoginDAO.class);
 
-
+	/**
+	 * User account is created with a new user with it. 
+	 * @param ua Useraccount object sent to be stored
+	 * @param role the role of new user to be associated with this account
+	 */
 	public void create(UserAccount ua,String role) {
 		try {
 			begin();
@@ -35,20 +49,9 @@ public class LoginDAO extends DAO{
 			
 			ua.setUser(us);
 			us.setUserAccount(ua);	
-			
-					
-			ParkingRequest prq = new ParkingRequest();
-			prq.setDescription("One of Many Request: " + ua.getUsername() );
-			prq.setRsp(rowSpot.NINE);
-			prq.setEndTime(new Date());
-			prq.setUser(us);
-
-			us.getRequestSet().add(prq);			
-			
+						
 			getSession().persist(ua);
-			commit();
-			
-			
+			commit();			
 			
 			log.info("Account creation Successful");
 		} catch (HibernateException e) {
@@ -59,31 +62,43 @@ public class LoginDAO extends DAO{
 		}
 	}
 	
-	
-
+	/**
+	 * Static method used only for verification of the user. A temp object is 
+	 * retrieved and check in the database if it exist.
+	 * 
+	 * Instead of using Hibernate criteria which is used frequently in this project, 
+	 * a demonstration of using standard SQL is shown here.
+	 * @param bean object containing attribute email [username] & password to check
+	 * @return returns bool true if user exist otherwise false.
+	 */
 	public static boolean validate(LoginBean bean){  
 		boolean status=false;  
-		try{  
-		Connection con = ConnectionProvider.getCon();  
-		              
-		PreparedStatement ps = con.prepareStatement(  
-		    "select * from useraccount_table where username=? and password=?");  
-		  
-		ps.setString(1,bean.getEmail());  
-		ps.setString(2, bean.getPass());  
-		              
-		ResultSet rs=ps.executeQuery();  
-		status=rs.next();  
+		try {  
+			Connection con = ConnectionProvider.getCon();  
+			              
+			PreparedStatement ps = con.prepareStatement(  
+			    "select * from useraccount_table where username=? and password=?");  
+			  
+			ps.setString(1,bean.getEmail());  
+			ps.setString(2, bean.getPass());  
+			              
+			ResultSet rs=ps.executeQuery();  
+			status=rs.next();  
   
-		}catch(Exception e){}  
+		}catch(Exception e){
+			log.warn("Error occured when trying to retrieve the user");
+			e.printStackTrace();
+		}  
 		  
 		return status;  
 		}
+		
 	
-	/*
-	 * Get User Account by supplying id;
+	/**
+	 * Retrives the useraccount using criteria & restrictions.
+	 * @param username
+	 * @return object userAccount
 	 */
-	@Test
 	public UserAccount getUserAccountByUserName(String username) {
 		UserAccount ua = null;
 		try {
@@ -94,7 +109,7 @@ public class LoginDAO extends DAO{
 			cr.setMaxResults(1);
 			
 			ua = (UserAccount) cr.uniqueResult();
-			assert(ua.getPassword() == "bomber");
+			
 			
 		} catch(HibernateException e) {
 			log.warn("Unable to modify user account");
@@ -105,8 +120,11 @@ public class LoginDAO extends DAO{
 		return ua;		
 	}
 
-	/*
-	 * Modify User Account password
+	/**
+	 * Logic pertaining to modification of useraccount password & username
+	 * @param user_id the account ID to be modified
+	 * @param newPassword the new password to be used
+	 * @param newUsername the new username to be associated with the same account
 	 */
 	public void modifyUserAccountById(int user_id, String newPassword, String newUsername) {
 		try {
@@ -132,6 +150,11 @@ public class LoginDAO extends DAO{
 		}
 	}
 	
+	/**
+	 * Deletes user account along with all data associated with it. Makes uses of 
+	 * cascade functionality. 
+	 * @param user_id the user account to be deleted by ID
+	 */
 	public void deleteUserAccountById(int user_id) {
 		try {
 			begin();

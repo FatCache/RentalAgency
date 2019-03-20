@@ -45,16 +45,12 @@
 				<th width="80">User Id</th>	
 				<th width="80">Name</th>
 				<th width="80">Role</th>
-				<th width="80">Delete</th>
 			</tr>
 			<c:forEach items="${users}" var="ua">
 				<tr>
 					<td>${ua.user_id}</td>
 					<td>${ua.name}</td>
 					<td>${ua.role}</td>
-					<td><a
-						href="<c:url value='/manager/useraccount/view/remove/${ua.user_id}?viewtype=userview' />">Delete</a></td>
-				</tr>
 			</c:forEach>
 		</table>
 				

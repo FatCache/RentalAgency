@@ -7,6 +7,7 @@ package com.rentalagency.me.bean;
  * @author abdusamed
  *
  */
+
 public class LoginBean {
 	
 	private String email,pass;  
