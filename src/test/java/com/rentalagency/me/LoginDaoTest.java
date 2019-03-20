@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class QueryTest {
+public class LoginDaoTest {
 
 	@Test
 	public void test() {

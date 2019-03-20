@@ -8,6 +8,10 @@
 </head>
 <body>
 	<h3>Dash board View</h3>
+	<hr>
+	<a href="${pageContext.request.contextPath}/useraccount/changepassword">Change Password</a>
+	<a href="${pageContext.request.contextPath}/logout">Logout</a>
+	<hr>
 	<h4>Current Page Type: ${pageType}</h4>
 	<!-- Conditional Check for Page Type Message -->
 	<c:choose>

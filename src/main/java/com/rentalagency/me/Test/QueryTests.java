@@ -22,6 +22,7 @@ public class QueryTests {
 
 	private QueryDAO querydao;
 
+
 	@Before
 	public void initApplicationContext() {
 		context = new ClassPathXmlApplicationContext("/servlet-context.xml");
@@ -120,7 +121,7 @@ public class QueryTests {
 	/*
 	 * Testing the name so it not null for account number 2
 	 */
-	@Test
+//	@Test
 	public void getUserByIdTest() {
 		User us = querydao.getUserById(2);
 		
@@ -128,4 +129,12 @@ public class QueryTests {
 		
 	}
 	
+	/*
+	 * Test Useraccount retrieved are NON MANAGER role
+	 */
+//	@Test
+//	public void getUserAccountNonManagerTest() {
+//		List<UserAccount> ul = querydao.getListOfUserAccountRegular();
+//		assert(ul.size() != 0);
+//	}
 }

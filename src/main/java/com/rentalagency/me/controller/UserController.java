@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.rentalagency.me.Utilities;
 import com.rentalagency.me.dao.QueryDAO;
@@ -24,20 +26,26 @@ import com.rentalagency.me.model.ParkingRequest;
 import com.rentalagency.me.model.ParkingRequest.colSpot;
 import com.rentalagency.me.model.ParkingRequest.rowSpot;
 import com.rentalagency.me.model.User;
+import com.rentalagency.me.model.UserAccount;
 
 @Controller
 @RequestMapping("/user/")
+@SessionAttributes("user")
 public class UserController {
 	
 	@Autowired
 	QueryDAO querydao;
 	
+	
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+	public String dashboard(SessionStatus status) {
+		
+		return "dashboard/regular";
+	}
+	
 	// User Creates Request
 	@RequestMapping(value="/request/create",method=RequestMethod.GET)
 	public String requestForm(Model model, HttpSession session) {
-		User user = new User();
-		user.setUser_id(4);
-		session.setAttribute("user", user);
 		
 		model.addAttribute("parkingrequest", new ParkingRequest());
 		model.addAttribute("rowspot", rowSpot.values());
@@ -57,10 +65,7 @@ public class UserController {
 		prq.setRsp(rowSpot.valueOf(rsp));
 		prq.setStartTime(Utilities.getDate(startTime));
 		
-		querydao.submitRequestById(prq, prq.getUser_id());
-
-		
-		
+		querydao.submitRequestById(prq, prq.getUser_id());	
 		
 		return "index";
 	}

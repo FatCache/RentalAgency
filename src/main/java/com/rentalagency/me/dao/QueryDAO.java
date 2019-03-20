@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.rentalagency.me.model.ParkingRequest;
 import com.rentalagency.me.model.User;
+import com.rentalagency.me.model.User.Role;
 import com.rentalagency.me.model.UserAccount;
 import com.rentalagency.me.model.ParkingRequest.colSpot;
 import com.rentalagency.me.model.ParkingRequest.rowSpot;
@@ -22,27 +23,51 @@ public class QueryDAO extends DAO {
 	
 	private final static Logger log = LoggerFactory.getLogger(QueryDAO.class);
 	
-	// Retrieve a list of UserAccount
+	/*
+	 * Retrieves list of Users who do not belong to Manager
+	 * 
+	 */
 	public List<UserAccount> getListOfUserAccount() {
 		List<UserAccount> userList = null;
 		try {
 			begin();
-			Criteria cr = getSession().createCriteria(UserAccount.class);
-			
-			userList = (List<UserAccount>) cr.list();
-			
-			commit();			
+			Criteria userCriteria = getSession().createCriteria(User.class);
+			userCriteria.add(Restrictions.ne("role", Role.MANAGER));
+			userList = (List<UserAccount>) userCriteria.list();
 			
 		} catch(HibernateException e) {
-			log.warn("Unable to modify user account");
+			log.warn("Unable to retrieve accounts");
 			rollback();
 		}finally {
 			close();
 		}
-		
 		return userList;
-		
 	}
+	
+	/*
+	 * Returns a list of User Accounts via User table who are not Manager 
+	 * Because a manager cannot delete himself directly
+	 */
+	public List<UserAccount> getListOfUserAccountRegular() {
+		List<UserAccount> userList = null;
+		try {
+			begin();
+			Criteria userCriteria = getSession().createCriteria(UserAccount.class);
+			userCriteria.createCriteria("user","u");			
+			userCriteria.add(Restrictions.ne("u.role", Role.MANAGER));			
+			
+			userList = (List<UserAccount>) userCriteria.list();
+			
+			
+		} catch(HibernateException e) {
+			log.warn("Unable to retrieve accounts");
+			rollback();
+		}finally {
+			close();
+		}
+		return userList;
+	}
+	
 	// Retrieve a list of Users
 	public List<User> getListOfUsers() {
 		List<User> userList = null;
@@ -66,7 +91,9 @@ public class QueryDAO extends DAO {
 	}
 	
 	
-	// Retrieve User by Id
+	/*
+	 * Uses SQL Query to Retrieve Data
+	 */
 	public User getUserById(int id) {
 		User user = null;
 		try {
@@ -213,10 +240,7 @@ public class QueryDAO extends DAO {
 		}
 	}
 	
-	/*
-	 * Retrieve any parking request by Id;
-	 * Usecase: Management 
-	 */
+	// Checks if parking request retrieve is expected and not null
 	public ParkingRequest getParkingRequestById(int request_id) {
 		ParkingRequest pr = null;
 		try {
@@ -236,6 +260,6 @@ public class QueryDAO extends DAO {
 		return pr;
 	}
 	
-	
+
 
 }

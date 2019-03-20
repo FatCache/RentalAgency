@@ -55,7 +55,7 @@ public class SimpleMessageController {
 	@RequestMapping(value="/edit/{id}", method = RequestMethod.GET)
 	public String editeMessage(Model model, @PathVariable("id") int id) {
 		SimpleMessage simplemessage = this.smdao.getMessageById(id);
-		System.out.println(simplemessage.getContent());
+		
 		List<SimpleMessage> smlist = this.smdao.getMessageList();
 		
 		model.addAttribute("simplemessage",simplemessage);

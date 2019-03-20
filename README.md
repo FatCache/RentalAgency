@@ -1,13 +1,21 @@
-# RentalAgency
+# Apartment Management Web Application :hotel:
 
-Prototype web application to be used by a rental agency or apartment management company. It allows existing customers to interact with management to notify them of request. Management have the ability to perform CRUD operation on User. 
+A web application demonstrating potential use cases encountered by a apartment management company. The back end is written in Java using Spring MVC framework. 
+
+## Features
+- Login interface - create account, change password
+- Two roles basic roles Manager & Regular
+- Manager to view request made by individual users
+- Object relational mapping completely handled by Hibernate
+- Queries written in native SQL, HQL and using Criteria
+- Session management used to stored current logged in user
+- DAO Pattern to keep business layer & persistence layer seperate
 
 
-Data persistence is achieved by Hibernate ORM to perform CUD operation whereas SQL is used to retrieve data. JDBC is used to interact with the database. 
+## Technology
 
-This version is based on MySQL Database
- 
-## Features:
+The web layer is handled by Spring MVC framework. The views are JSPs and data persistence achieved on MySQL via Hibernate ORM. Unit test cases are written in jUnit. Abstract classes used to make addition of features a breeze. Dependency Injection with auto wiring used. The view layer is completely handled by JSP.
 
-### User
-- 
+
+### Developed By
+Abdusamed

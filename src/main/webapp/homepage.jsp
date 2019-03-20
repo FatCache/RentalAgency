@@ -4,10 +4,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="theme1/css/main.css" type="text/css"></link>
 <title>Dashboard</title>
 </head>
 <body>
-
+The wonder of session ${user.username}
 <h3>Homepage will be dashboard</h3>
 
 </body>

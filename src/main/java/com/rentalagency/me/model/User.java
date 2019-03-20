@@ -45,7 +45,23 @@ public class User  {
 	private Set<Request> requestSet = new HashSet<Request>();
 	
 	public enum Role {
-		REGULAR,MANGER
+		REGULAR("REGULAR"),MANAGER("MANAGER");
+		
+		private String value;
+		
+		private Role(String value) {
+			this.value = value;
+		}
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+		
+		
 	}
 
 	public int getUser_id() {

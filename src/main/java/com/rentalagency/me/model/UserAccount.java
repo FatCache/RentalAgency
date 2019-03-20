@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.engine.spi.CascadeStyle;
 
 /*
- * One Useraccuont is mapped to one User object
+ * One Useraccount is mapped to one User object
  * If the useraccount is deleted, along with all history tied to it
  */
 @Entity

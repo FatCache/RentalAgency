@@ -26,6 +26,7 @@ import com.rentalagency.me.model.Request;
 import com.rentalagency.me.model.SimpleMessage;
 
 import com.rentalagency.me.model.User;
+import com.rentalagency.me.model.User.Role;
 import com.rentalagency.me.model.UserAccount;
 
 import org.junit.Before;
@@ -36,14 +37,16 @@ public class LoginDAO extends DAO{
 	private final static Logger log = LoggerFactory.getLogger(LoginDAO.class);
 
 
-	public void create(UserAccount ua) {
+	public void create(UserAccount ua,String role) {
 		try {
 			begin();
 			User us = new User();
-			us.setName("Created By: "  + ua.getUsername());
+			us.setName(ua.getUsername());
+			us.setRole(Role.valueOf(role));
 			
 			ua.setUser(us);
 			us.setUserAccount(ua);	
+			
 					
 			ParkingRequest prq = new ParkingRequest();
 			prq.setDescription("One of Many Request: " + ua.getUsername() );
@@ -75,7 +78,7 @@ public class LoginDAO extends DAO{
 		Connection con = ConnectionProvider.getCon();  
 		              
 		PreparedStatement ps = con.prepareStatement(  
-		    "select * from usertable where email=? and pass=?");  
+		    "select * from useraccount_table where username=? and password=?");  
 		  
 		ps.setString(1,bean.getEmail());  
 		ps.setString(2, bean.getPass());  
@@ -88,6 +91,30 @@ public class LoginDAO extends DAO{
 		return status;  
 		}
 	
+	/*
+	 * Get User Account by supplying id;
+	 */
+	@Test
+	public UserAccount getUserAccountByUserName(String username) {
+		UserAccount ua = null;
+		try {
+			begin();
+			Criteria cr = getSession().createCriteria(UserAccount.class);
+			Criterion userModify = Restrictions.eq("username", username);
+			cr.add(userModify);
+			cr.setMaxResults(1);
+			
+			ua = (UserAccount) cr.uniqueResult();
+			assert(ua.getPassword() == "bomber");
+			
+		} catch(HibernateException e) {
+			log.warn("Unable to modify user account");
+			rollback();
+		}finally {
+			close();
+		}
+		return ua;		
+	}
 
 	/*
 	 * Modify User Account password
@@ -105,6 +132,31 @@ public class LoginDAO extends DAO{
 			user.setPassword(newPassword);
 			
 			getSession().update(user);
+			
+			commit();			
+			
+		} catch(HibernateException e) {
+			log.warn("Unable to modify user account");
+			rollback();
+		}finally {
+			close();
+		}
+	}
+	
+	public void deleteUserAccountById(int user_id) {
+		try {
+			begin();
+			Criteria cr = getSession().createCriteria(UserAccount.class);
+			Criterion userModify = Restrictions.eq("user_id", new Integer(user_id));
+			cr.add(userModify);
+			cr.setMaxResults(1);
+			
+			UserAccount user = (UserAccount) cr.uniqueResult();
+		
+			if(user != null) {
+				getSession().delete(user);
+			}
+			
 			
 			commit();			
 			
