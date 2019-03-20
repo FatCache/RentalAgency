@@ -9,7 +9,7 @@
 <title>User Request</title>
 </head>
 <body>
-<h2>List of Request</h3>
+<h2>User Management View</h3>
 <nav>
 	<a href="${contextpath}/manager/dashboard">Dashboard</a>
 	<a href="${contextpath}/logout">Logout</a>
@@ -18,21 +18,20 @@
 
 <!-- Displays User Account OR User details list -->
 		<c:if test = "${pageType eq 'useraccountview'}">
-		
-		<table class="tg" style="border: 2px solid black">
+		<h4>User Account List</h4>
+		<table class="tg">
 			<tr>
 				<th width="80">User Id</th>	
-				<th width="80">Name</th>
-				<th width="80">Role</th>
-				<th width="80">Delete</th>
+				<th width="80">Username</th>
+				<th width="80">Password</th>
 			</tr>
 			<c:forEach items="${useraccounts}" var="ua">
 				<tr>
 					<td>${ua.user_id}</td>
-					<td>${ua.name}</td>
-					<td>${ua.role}</td>
+					<td>${ua.username}</td>
+					<td>${ua.password}</td>
 					<td><a
-						href="<c:url value='/manager/useraccount/view/remove/${ua.user_id}' />">Delete</a></td>
+						href="<c:url value='/manager/useraccount/view/remove/${ua.user_id}?viewtype=useraccountview' />">Delete</a></td>
 				</tr>
 			</c:forEach>
 		</table>
@@ -40,6 +39,24 @@
 		</c:if>
 		
 		<c:if test = "${pageType eq 'userview'}">
+		<h4>User List</h4>
+		<table class="tg">
+			<tr>
+				<th width="80">User Id</th>	
+				<th width="80">Name</th>
+				<th width="80">Role</th>
+				<th width="80">Delete</th>
+			</tr>
+			<c:forEach items="${users}" var="ua">
+				<tr>
+					<td>${ua.user_id}</td>
+					<td>${ua.name}</td>
+					<td>${ua.role}</td>
+					<td><a
+						href="<c:url value='/manager/useraccount/view/remove/${ua.user_id}?viewtype=userview' />">Delete</a></td>
+				</tr>
+			</c:forEach>
+		</table>
 				
 		</c:if>
 

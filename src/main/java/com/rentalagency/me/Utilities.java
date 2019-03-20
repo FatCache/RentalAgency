@@ -4,8 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Utility Class
+ * @author abdusamed
+ *
+ */
 public class Utilities {
-	// Parse HTML5 string to Java Date
+
+	// HTML5 Date Parser to Java Date
 	public static Date getDate(String date)   {
 		
 		String pattern = "yyyy-MM-dd";

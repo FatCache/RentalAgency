@@ -9,12 +9,12 @@
 <span>Hi User: ${user.username}</span>
 <h3>Create Parking Request</h3>
 <nav>
-<a href="${pageContext.request.contextPath}/user/regular/dashboard">Dashboard</a>
+<a href="${pageContext.request.contextPath}/user/dashboard">Dashboard</a>
 <a href="${pageContext.request.contextPath}/logout">Logout</a>
 </nav>
 <hr>
 	<form:form method="POST" modelAttribute="parkingrequest"
-		action="${pageContext.request.contextPath}/user/request/create/}">
+		action="${pageContext.request.contextPath}/user/request/create/">
 		<table>
 			<tr>
 				<td>User ID:</td>

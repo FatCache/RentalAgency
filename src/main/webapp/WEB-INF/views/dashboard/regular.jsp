@@ -12,14 +12,14 @@
 <span>Hi User: ${user.username}</span>
 
 <nav>
-<a href="${pageContext.request.contextPath}/regular/dashboard">Dashboard</a>
+<a href="${pageContext.request.contextPath}/user/dashboard/">Dashboard</a>
 <a href="${pageContext.request.contextPath}/logout">Logout</a>
 </nav>
 <hr>
 Action
 <nav>
 <a href="${pageContext.request.contextPath}/user/request/create">Create Parking Request</a>
-<a href="#">View My Requests</a>
+<a href="${pageContext.request.contextPath}/user/request/view/${user.user_id}">View My Requests</a>
 </nav>
 
 

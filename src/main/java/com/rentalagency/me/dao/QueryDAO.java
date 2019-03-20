@@ -24,16 +24,15 @@ public class QueryDAO extends DAO {
 	private final static Logger log = LoggerFactory.getLogger(QueryDAO.class);
 	
 	/*
-	 * Retrieves list of Users who do not belong to Manager
-	 * 
+	 * Retrieves list of Users without Manager Role
 	 */
-	public List<UserAccount> getListOfUserAccount() {
-		List<UserAccount> userList = null;
+	public List<User> getListOfUserAccount() {
+		List<User> userList = null;
 		try {
 			begin();
 			Criteria userCriteria = getSession().createCriteria(User.class);
 			userCriteria.add(Restrictions.ne("role", Role.MANAGER));
-			userList = (List<UserAccount>) userCriteria.list();
+			userList = (List<User>) userCriteria.list();
 			
 		} catch(HibernateException e) {
 			log.warn("Unable to retrieve accounts");
@@ -54,7 +53,7 @@ public class QueryDAO extends DAO {
 			begin();
 			Criteria userCriteria = getSession().createCriteria(UserAccount.class);
 			userCriteria.createCriteria("user","u");			
-			userCriteria.add(Restrictions.ne("u.role", Role.MANAGER));			
+			userCriteria.add(Restrictions.ne("u.role", Role.REGULAR));			
 			
 			userList = (List<UserAccount>) userCriteria.list();
 			

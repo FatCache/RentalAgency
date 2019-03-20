@@ -1,5 +1,12 @@
 package com.rentalagency.me.bean;
 
+/**
+ * This bean is created only during Login Validation check in LoginDAO
+ * Used for user login authentication
+ *  
+ * @author abdusamed
+ *
+ */
 public class LoginBean {
 	
 	private String email,pass;  
