@@ -69,7 +69,7 @@ public class QueryTests {
 
 //	@Test
 	public void getListOfUserAccount() {
-		List<UserAccount> l = querydao.getListOfUserAccount();
+		List<User> l = querydao.getListOfUserAccount();
 		assert(l.size() != 0);
 	}
 	

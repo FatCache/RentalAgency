@@ -3,34 +3,23 @@ package com.rentalagency.me.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.query.Query;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import com.rentalagency.me.bean.ConnectionProvider;
 import com.rentalagency.me.bean.LoginBean;
-
 import com.rentalagency.me.model.ParkingRequest;
-import com.rentalagency.me.model.ParkingRequest.colSpot;
 import com.rentalagency.me.model.ParkingRequest.rowSpot;
-import com.rentalagency.me.model.Request;
-import com.rentalagency.me.model.SimpleMessage;
-
 import com.rentalagency.me.model.User;
 import com.rentalagency.me.model.User.Role;
 import com.rentalagency.me.model.UserAccount;
-
-import org.junit.Before;
-import org.junit.Test;
 
 public class LoginDAO extends DAO{
 	

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
@@ -88,13 +90,14 @@ public class ManagerController {
 	public String deleteRequest(Model model,
 			@PathVariable("id") int id) {
 		querydao.deleteRequestById(id);
-		return "redirect:/manager/requestview";	
+		return "redirect:/manager/request/parkingrequest/view";	
 	}
 	
-	/*
-	 * Retrieve User *account* list without manager role and resolve view 
+	/**
+	 * R
+	 * @param model
+	 * @return
 	 */
-	
 	@RequestMapping(value="/useraccount/view",method=RequestMethod.GET)
 	public String getUserAccount(Model model) {
 		List<UserAccount> uas = querydao.getListOfUserAccountRegular();
@@ -142,14 +145,18 @@ public class ManagerController {
 	 * Custom Exception Handling for this class
 	 */
 	@ExceptionHandler(ResourceNotFoundException.class)
-	@ResponseStatus(HttpStatus.BANDWIDTH_LIMIT_EXCEEDED)
 	public String handleResourceNotFoundException() {
-	        return "error";
-	    }
+	    return "error";	    
+	}
 	
 	
 	@RequestMapping(value = "api/useraccount/view", method = RequestMethod.GET)
-	public String messageGetJSON(Model model, @PathVariable String user) {
+	public String messageGetJSON(Model model,HttpSession session) {
+		if(session.getAttribute("user") == null) {
+			throw new ResourceNotFoundException();
+		}
+		UserAccount user = (UserAccount) session.getAttribute("user");
+		System.out.println("Super simple session" + user.getUsername());
 		List<UserAccount> uas = querydao.getListOfUserAccountRegular();
 		model.addAttribute("uas", uas);
 		return "jsonTemplate";
