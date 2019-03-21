@@ -23,15 +23,16 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
+
+    
 	<context:component-scan base-package="com.rentalagency.me.controller" />
-	
+		
 	<!-- JSON Support -->
     
     <beans:bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
 	
 	<!-- Beans for Autowiring -->
-	<beans:bean name="smdao" class="com.rentalagency.me.dao.SimpleMessageDAO"></beans:bean>
+	
 	<beans:bean name="logindao" class="com.rentalagency.me.dao.LoginDAO"></beans:bean>
 	<beans:bean name="querydao" class="com.rentalagency.me.dao.QueryDAO"></beans:bean>
 	

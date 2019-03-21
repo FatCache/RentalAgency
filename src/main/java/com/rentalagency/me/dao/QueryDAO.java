@@ -211,7 +211,7 @@ public class QueryDAO extends DAO {
 			begin();
 			Criteria cr = getSession().createCriteria(ParkingRequest.class)
 					.add(Restrictions.eq("description", description))
-					.add(Restrictions.eq("user_id", user_id));
+					.add(Restrictions.eq("user_id", new Integer(user_id)));
 			
 			
 			cr.setMaxResults(1);
@@ -225,6 +225,7 @@ public class QueryDAO extends DAO {
 		}finally {
 			close();
 		}
+		System.out.println("WORKING USER ID IS ->" + rq.getUser_id());
 		
 		return rq;
 	}
@@ -339,6 +340,33 @@ public class QueryDAO extends DAO {
 			close();
 		}
 		return userList;
+	}
+	
+	/*
+	 * Returns the user_id assigned by Hibernate in the database
+	 */
+	public int getIdByUserAccount(UserAccount ua) {
+		UserAccount res = null;
+		try {
+			begin();
+			Criteria userCriteria = getSession().createCriteria(UserAccount.class);
+			
+			userCriteria.add(Restrictions.ne("username", ua.getUsername()));	
+			userCriteria.add(Restrictions.ne("password", ua.getPassword()));
+			
+			userCriteria.setMaxResults(1);
+			
+			res = (UserAccount) userCriteria.uniqueResult();
+			
+			
+		} catch(HibernateException e) {
+			log.warn("Unable to retrieve accounts");
+			rollback();
+		}finally {
+			close();
+		}
+		return res.getUser_id();
+		
 	}
 
 

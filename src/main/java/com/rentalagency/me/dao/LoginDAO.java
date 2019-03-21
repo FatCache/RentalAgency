@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Date;
+import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -167,6 +168,35 @@ public class LoginDAO extends DAO{
 		
 			if(user != null) {
 				getSession().delete(user);
+			}
+			
+			
+			commit();			
+			
+		} catch(HibernateException e) {
+			log.warn("Unable to modify user account");
+			rollback();
+		}finally {
+			close();
+		}
+	}
+	
+	/**
+	 * Used for batch delete accounts
+	 * @param user_id
+	 */
+	public void batchDeleteAccounts(String username) {
+		try {
+			begin();
+			Criteria cr = getSession().createCriteria(UserAccount.class);
+			Criterion userModify = Restrictions.eq("username",username);
+			cr.add(userModify);
+			
+			
+			List<UserAccount> user = (List<UserAccount>) cr.list();
+		
+			for(UserAccount ua : user) {
+				getSession().delete(ua);
 			}
 			
 			
