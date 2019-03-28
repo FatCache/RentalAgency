@@ -35,6 +35,7 @@
 	
 	<beans:bean name="logindao" class="com.rentalagency.me.dao.LoginDAO"></beans:bean>
 	<beans:bean name="querydao" class="com.rentalagency.me.dao.QueryDAO"></beans:bean>
+	<beans:bean name="avatardao" class="com.rentalagency.me.dao.AvatarDAO"></beans:bean>
 	
 	
 	

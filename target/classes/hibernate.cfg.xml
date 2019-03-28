@@ -17,6 +17,7 @@
 		
 		<mapping class="com.rentalagency.me.model.Request"/>
 		<mapping class="com.rentalagency.me.model.ParkingRequest"/>
+		<mapping class="com.rentalagency.me.model.Avatar"/>
 		
 	</session-factory>
 </hibernate-configuration>

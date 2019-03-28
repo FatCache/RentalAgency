@@ -1,19 +1,34 @@
 package com.rentalagency.me.controller;
 
+
+
+import java.awt.Image;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
+
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.IOUtils;
+import org.hibernate.sql.Insert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.rentalagency.me.bean.LoginBean;
+import com.rentalagency.me.dao.AvatarDAO;
 import com.rentalagency.me.dao.LoginDAO;
 import com.rentalagency.me.dao.QueryDAO;
 import com.rentalagency.me.model.User;
@@ -38,6 +53,9 @@ public class LoginController {
 	
 	@Autowired
 	QueryDAO querydao;
+	
+	@Autowired
+	AvatarDAO avatardao;
 	
 	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
@@ -193,5 +211,43 @@ public class LoginController {
 		status.setComplete();
 		return "redirect:/login";
 	}
+	
+	/**
+	 * Image Display Test
+	 * @throws UnsupportedEncodingException 
+	 */
+	@RequestMapping(value = "/image/{imageid}", method = RequestMethod.GET)
+	public String image(Model model,@PathVariable int imageid) throws UnsupportedEncodingException {
+        if(imageid == 0) {
+        	return "error";
+        }
+        	
+		String encodeBase64 = convertBinImageToString(avatardao.getAvatar(imageid).getImage()); 
+		String photoencodeBase64 = new String(encodeBase64);
+		model.addAttribute("userImage", photoencodeBase64);
+		return "imageview";	
+	}
+	
+	public static String convertBinImageToString(byte[] binImage) {
+	    if(binImage!=null && binImage.length>0) {
+	        return Base64.getEncoder().encodeToString(binImage);
+	    }
+	    else
+	        return "";
+	}
+	
+	/**
+	 * Creates an image on an endpoint
+	 * @param imageid
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "api/image/{imageid}",method= RequestMethod.GET,produces = MediaType.IMAGE_JPEG_VALUE)
+	public @ResponseBody byte[] getImageWithMediaType(@PathVariable int imageid) throws IOException {
+		InputStream in = new ByteArrayInputStream(avatardao.getAvatar(imageid).getImage());
+		return IOUtils.toByteArray(in);
+		}
+
+	
 
 }
