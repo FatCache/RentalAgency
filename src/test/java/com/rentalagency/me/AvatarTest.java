@@ -72,7 +72,7 @@ public class AvatarTest {
         Avatar avatar = avatarDAO.getAvatar(5);
  
         assertNotNull(avatar);
-        // Using FileOutputStream
+        
         try{
             //FileOutputStream fos = new FileOutputStream("images\\output.jpg");  //windows
             FileOutputStream fos = new FileOutputStream("src/main/resources/Test"+avatar.getName());            
@@ -80,18 +80,7 @@ public class AvatarTest {
             fos.close();
         }catch(Exception e){
             e.printStackTrace();
-        }
-//        InputStream stream = new ByteArrayInputStream(avatar.getImage());
-//        File file = new File("src/main/resources/Testoutput.png");
-//        try {
-//        	FileOutputStream outputStream = new FileOutputStream(file);
-//        	BufferedImage bufferedImage = ImageIO.read(stream);
-//        	ImageIO.write(bufferedImage, "png", outputStream);
-//        	System.out.println("Image file location: "+file.getCanonicalPath());
-//        } catch (IOException e) {
-//           e.printStackTrace();
-//        }
-        
+        }        
         
     }
 

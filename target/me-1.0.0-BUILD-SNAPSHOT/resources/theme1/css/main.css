@@ -1,0 +1,10 @@
+
+body {
+	margin:20px auto;
+	padding:20px;
+	width:800px;
+}
+
+table, th, td {
+  border: 1px solid black;
+}

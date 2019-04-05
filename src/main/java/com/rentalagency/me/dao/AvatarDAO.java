@@ -40,8 +40,6 @@ public class AvatarDAO extends DAO {
            return avatar;
        } catch (HibernateException e) {
            e.printStackTrace();
-       } finally {
-           getSession().close();
        }
        return null;
    }

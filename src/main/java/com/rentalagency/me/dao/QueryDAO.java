@@ -9,17 +9,15 @@ import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
-import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.rentalagency.me.model.ParkingRequest;
+import com.rentalagency.me.model.Request;
 import com.rentalagency.me.model.User;
 import com.rentalagency.me.model.User.Role;
 import com.rentalagency.me.model.UserAccount;
-import com.rentalagency.me.model.ParkingRequest.colSpot;
-import com.rentalagency.me.model.ParkingRequest.rowSpot;
-import com.rentalagency.me.model.Request;
+
 
 /**
  * Data persistence logic pertaining to most of the web application behavior
